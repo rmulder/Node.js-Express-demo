@@ -4,6 +4,8 @@ const express = require('express');
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true} ));
+app.use(express.static('public'));
 
 app.use(logger);
 
@@ -29,7 +31,7 @@ app.get('/api/courses', (req, res) => {
 app.post('/api/courses', (req, res) => {
 
     const { error } = validateCourse(req.body);
-    if (error) return res.status(400).send(result.error.details[0].message);
+    if (error) return res.status(400).send(results.error.details[0].message);
     
     const course = {
         id: courses.length + 1,
