@@ -1,5 +1,5 @@
-const startupDebugger = require('debug')('app:startup');
-const dbDebugger = require('debug')('app:db');
+// const startupDebugger = require('debug')('app:startup');
+// const dbDebugger = require('debug')('app:db');
 const config = require('config');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -7,6 +7,9 @@ const Joi = require('joi');
 const logger = require('./logger')
 const express = require('express');
 const app = express();
+
+app.set('view engine', 'pug');
+app.set('views', './views');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true} ));
@@ -20,11 +23,7 @@ console.log('Mail Password: ' + config.get('mail.password'));
 
 if (app.get('env') === 'development') {
     app.use(morgan('tiny'));
-    startupDebugger('Morgan enabled...');
 }
-
-// Db work...
-dbDebugger('Connected to the database...')
 
 app.use(logger);
 
@@ -40,7 +39,7 @@ const courses = [
 ];
 
 app.get('/', (req, res) => {
-    res.send('Hello World');
+    res.render('index', { title : 'My Express App', message: 'Hello'});
 });
 
 app.get('/api/courses', (req, res) => {
